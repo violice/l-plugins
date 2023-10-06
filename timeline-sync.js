@@ -1,18 +1,20 @@
 (async function () {
   "use strict";
 
-  console.log("timeline-sync: init");
+  console.log("timeline-sync:init");
 
   const originSetFunction = window.Lampa.Storage.set;
   window.Lampa.Storage.set = function (...args) {
     originSetFunction(...args);
     if (args[0] === "file_view") {
+      localStorage.setItem("timeline-sync:time", Date.now());
       window.dispatchEvent(new Event("timeline-sync"));
     }
   };
 
   const GIST_ID = "c57454b207a09b2c3b353ef504113097";
-  const TOKEN = "11AFJGCGA0NChmW5zlPtbh_A5QWu6KXW1KsFzXFouxoQpXMFh6yl6hVoFQGjxTXQLCZ7LHNK6AZm9y3qJ5";
+  const TOKEN =
+    "11AFJGCGA0NChmW5zlPtbh_A5QWu6KXW1KsFzXFouxoQpXMFh6yl6hVoFQGjxTXQLCZ7LHNK6AZm9y3qJ5";
 
   async function getGistContent() {
     const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
@@ -58,24 +60,20 @@
 
   const gistContent = await getGistContent();
 
-  const lastSyncTime = localStorage.getItem("last-sync-time");
-  if (!lastSyncTime || Number(lastSyncTime) < gistContent.time) {
-    localStorage.setItem("file_view", JSON.stringify(gistContent.data));
-    localStorage.setItem("last-sync-time", Date.now());
+  const storageData = localStorage.getItem("file_view") || "{}";
+  const storageTime = localStorage.getItem("timeline-sync:time") || "0";
+  let data = {};
+  if (Number(storageTime) > gistContent.time) {
+    data = { ...gistContent.data, ...JSON.parse(storageData) };
   } else {
-    const storageData = localStorage.getItem("file_view");
-    if (storageData) {
-      patchGistContent(JSON.parse(storageData));
-      localStorage.setItem("last-sync-time", Date.now());
-    }
+    data = { ...JSON.parse(storageData), ...gistContent.data };
   }
+  localStorage.setItem("file_view", JSON.stringify(data));
+  patchGistContent(data);
 
   window.addEventListener("timeline-sync", async (event) => {
-    console.log("timeline-sync: sync", event);
-    const storageData = localStorage.getItem("file_view");
-    if (storageData) {
-      patchGistContent(JSON.parse(storageData));
-      localStorage.setItem("last-sync-time", Date.now());
-    }
+    console.log("timeline-sync:sync", event);
+    const storageData = localStorage.getItem("file_view") || "{}";
+    patchGistContent(JSON.parse(storageData));
   });
 })();
