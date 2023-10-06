@@ -2,7 +2,7 @@
   "use strict";
 
   const GIST_ID = "c57454b207a09b2c3b353ef504113097";
-  const TOKEN = "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";
+  const TOKEN = localStorage.getItem("timeline-sync-token");
 
   async function getGistContent () {
     const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
