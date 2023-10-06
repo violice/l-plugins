@@ -3,6 +3,14 @@
 
   console.log("timeline-sync: init");
 
+  const originSetFunction = window.Lampa.Storage.set;
+  window.Lampa.Storage.set = function (...args) {
+    originSetFunction(...args);
+    if (args[0] === "file_view") {
+      window.dispatchEvent(new Event("timeline-sync"));
+    }
+  };
+
   const GIST_ID = "c57454b207a09b2c3b353ef504113097";
   const TOKEN = localStorage.getItem("timeline-sync-token");
 
@@ -62,14 +70,12 @@
     }
   }
 
-  window.addEventListener("storage", async (event) => {
-    console.log("timeline-sync: STORAGE_EVENT", event);
-    if (event.key === "file_view") {
-      const storageData = localStorage.getItem("file_view");
-      if (storageData) {
-        patchGistContent(JSON.parse(storageData));
-        localStorage.setItem("last-sync-time", Date.now());
-      }
+  window.addEventListener("timeline-sync", async (event) => {
+    console.log("timeline-sync: sync", event);
+    const storageData = localStorage.getItem("file_view");
+    if (storageData) {
+      patchGistContent(JSON.parse(storageData));
+      localStorage.setItem("last-sync-time", Date.now());
     }
   });
 })();
