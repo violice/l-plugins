@@ -54,6 +54,7 @@
   }
 
   window.addEventListener("storage", async (event) => {
+    console.log("STORAGE_EVENT", e);
     if (event.key === "file_view") {
       const storageData = localStorage.getItem("file_view");
       patchGistContent(storageData);
