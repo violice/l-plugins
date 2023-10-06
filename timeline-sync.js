@@ -1,10 +1,12 @@
 (async function () {
   "use strict";
 
+  console.log("timeline-sync: init");
+
   const GIST_ID = "c57454b207a09b2c3b353ef504113097";
   const TOKEN = localStorage.getItem("timeline-sync-token");
 
-  async function getGistContent () {
+  async function getGistContent() {
     const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
       method: "get",
       headers: {
@@ -54,16 +56,20 @@
     localStorage.setItem("last-sync-time", Date.now());
   } else {
     const storageData = localStorage.getItem("file_view");
-    patchGistContent(storageData);
-    localStorage.setItem("last-sync-time", Date.now());
+    if (storageData) {
+      patchGistContent(JSON.parse(storageData));
+      localStorage.setItem("last-sync-time", Date.now());
+    }
   }
 
   window.addEventListener("storage", async (event) => {
-    console.log("STORAGE_EVENT", e);
+    console.log("timeline-sync: STORAGE_EVENT", event);
     if (event.key === "file_view") {
       const storageData = localStorage.getItem("file_view");
-      patchGistContent(storageData);
-      localStorage.setItem("last-sync-time", Date.now());
+      if (storageData) {
+        patchGistContent(JSON.parse(storageData));
+        localStorage.setItem("last-sync-time", Date.now());
+      }
     }
   });
 })();
