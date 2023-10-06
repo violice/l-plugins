@@ -18,7 +18,7 @@
     const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
       method: "get",
       headers: {
-        Authorization: `Bearer ${TOKEN}`,
+        Authorization: `Bearer github_pat_${TOKEN}`,
         "X-GitHub-Api-Version": "2022-11-28",
       },
     });
