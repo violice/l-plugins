@@ -2,7 +2,7 @@
   "use strict";
 
   const GIST_ID = "c57454b207a09b2c3b353ef504113097";
-  const TOKEN = "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";
+  const TOKEN = "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";
 
   async function getGistContent () {
     const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
@@ -46,24 +46,26 @@
     return json;
   }
 
-  const gistContent = await getGistContent();
+  await patchGistContent({ "test": "test" });
 
-  const lastSyncTime = localStorage.getItem("last-sync-time");
-  if (!lastSyncTime || Number(lastSyncTime) < gistContent.time) {
-    localStorage.setItem("file_view", JSON.stringify(gistContent.data));
-    localStorage.setItem("last-sync-time", Date.now());
-  } else {
-    const storageData = localStorage.getItem("file_view");
-    patchGistContent(storageData);
-    localStorage.setItem("last-sync-time", Date.now());
-  }
+  // const gistContent = await getGistContent();
 
-  window.addEventListener("storage", async (event) => {
-    console.log("STORAGE_EVENT", e);
-    if (event.key === "file_view") {
-      const storageData = localStorage.getItem("file_view");
-      patchGistContent(storageData);
-      localStorage.setItem("last-sync-time", Date.now());
-    }
-  });
+  // const lastSyncTime = localStorage.getItem("last-sync-time");
+  // if (!lastSyncTime || Number(lastSyncTime) < gistContent.time) {
+  //   localStorage.setItem("file_view", JSON.stringify(gistContent.data));
+  //   localStorage.setItem("last-sync-time", Date.now());
+  // } else {
+  //   const storageData = localStorage.getItem("file_view");
+  //   patchGistContent(storageData);
+  //   localStorage.setItem("last-sync-time", Date.now());
+  // }
+
+  // window.addEventListener("storage", async (event) => {
+  //   console.log("STORAGE_EVENT", e);
+  //   if (event.key === "file_view") {
+  //     const storageData = localStorage.getItem("file_view");
+  //     patchGistContent(storageData);
+  //     localStorage.setItem("last-sync-time", Date.now());
+  //   }
+  // });
 })();
