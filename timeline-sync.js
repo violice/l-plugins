@@ -2,10 +2,16 @@
   "use strict";
 
   const GIST_ID = "c57454b207a09b2c3b353ef504113097";
-  const TOKEN = "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";
+  const TOKEN = "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";
 
   async function getGistContent () {
-    const res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+    const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    });
     const gist = await res.json();
     if (!gist.files) {
       throw new Error(gist.message || "Incorrect gist");
@@ -22,7 +28,6 @@
     const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
       method: "PATCH",
       headers: {
-        Accept: "application/vnd.github+json",
         Authorization: `Bearer ${TOKEN}`,
         "X-GitHub-Api-Version": "2022-11-28",
       },
