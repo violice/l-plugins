@@ -46,26 +46,24 @@
     return json;
   }
 
-  await patchGistContent({ "test": "test" });
+  const gistContent = await getGistContent();
 
-  // const gistContent = await getGistContent();
+  const lastSyncTime = localStorage.getItem("last-sync-time");
+  if (!lastSyncTime || Number(lastSyncTime) < gistContent.time) {
+    localStorage.setItem("file_view", JSON.stringify(gistContent.data));
+    localStorage.setItem("last-sync-time", Date.now());
+  } else {
+    const storageData = localStorage.getItem("file_view");
+    patchGistContent(storageData);
+    localStorage.setItem("last-sync-time", Date.now());
+  }
 
-  // const lastSyncTime = localStorage.getItem("last-sync-time");
-  // if (!lastSyncTime || Number(lastSyncTime) < gistContent.time) {
-  //   localStorage.setItem("file_view", JSON.stringify(gistContent.data));
-  //   localStorage.setItem("last-sync-time", Date.now());
-  // } else {
-  //   const storageData = localStorage.getItem("file_view");
-  //   patchGistContent(storageData);
-  //   localStorage.setItem("last-sync-time", Date.now());
-  // }
-
-  // window.addEventListener("storage", async (event) => {
-  //   console.log("STORAGE_EVENT", e);
-  //   if (event.key === "file_view") {
-  //     const storageData = localStorage.getItem("file_view");
-  //     patchGistContent(storageData);
-  //     localStorage.setItem("last-sync-time", Date.now());
-  //   }
-  // });
+  window.addEventListener("storage", async (event) => {
+    console.log("STORAGE_EVENT", e);
+    if (event.key === "file_view") {
+      const storageData = localStorage.getItem("file_view");
+      patchGistContent(storageData);
+      localStorage.setItem("last-sync-time", Date.now());
+    }
+  });
 })();
