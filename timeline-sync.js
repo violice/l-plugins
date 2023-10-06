@@ -2,7 +2,7 @@
   "use strict";
 
   const GIST_ID = "c57454b207a09b2c3b353ef504113097";
-  const TOKEN = "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";
+  const TOKEN = "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";
 
   async function getGistContent () {
     const res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
