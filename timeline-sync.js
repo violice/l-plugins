@@ -12,7 +12,7 @@
   };
 
   const GIST_ID = "c57454b207a09b2c3b353ef504113097";
-  const TOKEN = localStorage.getItem("timeline-sync-token");
+  const TOKEN = "11AFJGCGA0NChmW5zlPtbh_A5QWu6KXW1KsFzXFouxoQpXMFh6yl6hVoFQGjxTXQLCZ7LHNK6AZm9y3qJ5";
 
   async function getGistContent() {
     const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
@@ -38,7 +38,7 @@
     const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
       method: "PATCH",
       headers: {
-        Authorization: `Bearer ${TOKEN}`,
+        Authorization: `Bearer github_pat_${TOKEN}`,
         "X-GitHub-Api-Version": "2022-11-28",
       },
       body: JSON.stringify({
