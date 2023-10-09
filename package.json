@@ -1,0 +1,14 @@
+{
+  "name": "l-plugins",
+  "version": "1.0.0",
+  "description": "",
+  "main": "timeline-sync.js",
+  "scripts": {
+    "build": "swc ./src -d dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@swc/cli": "^0.1.62"
+  }
+}
