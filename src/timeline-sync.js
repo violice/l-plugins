@@ -9,7 +9,7 @@
   const originSetFunction = window.Lampa.Storage.set;
   window.Lampa.Storage.set = function (...args) {
     originSetFunction(...args);
-    if (args[0] === "file_view") {
+    if (args[0] === "file_view_27689") {
       localStorage.setItem("timeline-sync:time", Date.now());
       window.dispatchEvent(new Event("timeline-sync"));
     }
@@ -59,7 +59,7 @@
 
   async function sync() {
     const gistContent = await getGistContent();
-    const storageData = localStorage.getItem("file_view") || "{}";
+    const storageData = localStorage.getItem("file_view_27689") || "{}";
     const storageTime = localStorage.getItem("timeline-sync:time") || "0";
     let data = {};
     if (Number(storageTime) > gistContent.time) {
@@ -67,7 +67,7 @@
     } else {
       data = { ...JSON.parse(storageData), ...gistContent.data };
     }
-    localStorage.setItem("file_view", JSON.stringify(data));
+    localStorage.setItem("file_view_27689", JSON.stringify(data));
     await patchGistContent(data);
   }
 
