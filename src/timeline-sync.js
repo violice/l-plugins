@@ -2,7 +2,7 @@
   "use strict";
 
   const GIST_ID = "c57454b207a09b2c3b353ef504113097";
-  const TOKEN = "11AFJGCGA0NChmW5zlPtbh_A5QWu6KXW1KsFzXFouxoQpXMFh6yl6hVoFQGjxTXQLCZ7LHNK6AZm9y3qJ5";
+  const TOKEN = "11AFJGCGA0p102BRJZqeG3_1CpaQovpKiJNkZQwabi0LUPhQDnrzxgjxVA7oEw1cE5SW6NUUBTRa2Ug7xL";
 
   console.log("timeline-sync:initialization");
 
