@@ -1,15 +1,20 @@
 (async function () {
   "use strict";
 
-  const GIST_ID = "c57454b207a09b2c3b353ef504113097";
-  const TOKEN = "11AFJGCGA0p102BRJZqeG3_1CpaQovpKiJNkZQwabi0LUPhQDnrzxgjxVA7oEw1cE5SW6NUUBTRa2Ug7xL";
+  console.log("TimelineSync", "initialization");
 
-  console.log("timeline-sync:initialization");
+  const GIST_ID = "c57454b207a09b2c3b353ef504113097";
+  const TOKEN =
+    "11AFJGCGA0p102BRJZqeG3_1CpaQovpKiJNkZQwabi0LUPhQDnrzxgjxVA7oEw1cE5SW6NUUBTRa2Ug7xL";
+
+  const account = window.Lampa.Account.canSync();
+  const storageKey = "file_view" + (account ? "_" + account.profile.id : "");
+  console.log("TimelineSync", `storageKey=${storageKey}`);
 
   const originSetFunction = window.Lampa.Storage.set;
   window.Lampa.Storage.set = function (...args) {
     originSetFunction(...args);
-    if (args[0] === "file_view_27689") {
+    if (args[0] === storageKey) {
       localStorage.setItem("timeline-sync:time", Date.now());
       window.dispatchEvent(new Event("timeline-sync"));
     }
@@ -59,7 +64,7 @@
 
   async function sync() {
     const gistContent = await getGistContent();
-    const storageData = localStorage.getItem("file_view_27689") || "{}";
+    const storageData = localStorage.getItem(storageKey) || "{}";
     const storageTime = localStorage.getItem("timeline-sync:time") || "0";
     let data = {};
     if (Number(storageTime) > gistContent.time) {
@@ -67,20 +72,20 @@
     } else {
       data = { ...JSON.parse(storageData), ...gistContent.data };
     }
-    localStorage.setItem("file_view_27689", JSON.stringify(data));
+    localStorage.setItem(storageKey, JSON.stringify(data));
     await patchGistContent(data);
   }
 
-  console.log("timeline-sync:initial-sync");
+  console.log("TimelineSync", "initial sync");
   await sync();
 
   window.addEventListener("timeline-sync", async (event) => {
-    console.log("timeline-sync:sync", event);
+    console.log("TimelineSync", "sync", event);
     sync();
   });
 
   setInterval(() => {
-    console.log("timeline-sync:background-sync");
+    console.log("TimelineSync", "background sync");
     sync();
   }, 1024 * 60 * 5);
 })();
