@@ -5,7 +5,7 @@
 
   const GIST_ID = "c57454b207a09b2c3b353ef504113097";
   const TOKEN =
-    "11AFJGCGA0uzRg24PWXOKs_HV2ROTy23IBhvyC0HUYDvMMhladzrxItGU2T4SqDQZkEDEWTMFYoKpyzWrl";
+    "11AFJGCGA098UIk2v40mb2_0HLf2mrMUvQUy5h8dzyykg0zPwQIAjTpGAwTsPID8LPRZF2IBWUaF0K1GuN";
 
   const account = window.Lampa.Account.canSync();
   const storageKey = "file_view" + (account ? "_" + account.profile.id : "");
